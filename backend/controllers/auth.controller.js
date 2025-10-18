@@ -119,3 +119,61 @@ export const logout = (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export const onboard = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const { fullName, bio, techIntrests, skillLevel, collaborationStyle } = req.body;
+
+        const allowedSkillLevels = ["begginer", "intermediate", "advance"];
+
+        //Check for missing fields
+        if (!fullName || !bio || !techIntrests || !skillLevel || !collaborationStyle) {
+            return res.status(400).json({
+                message: "All fields are required",
+                missingFields: [
+                    !fullName && "fullName",
+                    !bio && "bio",
+                    !techIntrests && "techIntrests",
+                    !skillLevel && "skillLevel",
+                    !collaborationStyle && "collaborationStyle",
+                ].filter(Boolean),
+            });
+        }
+
+        //Case-insensitive validation for skillLevel
+        const normalizedSkillLevel = skillLevel.toLowerCase();
+        if (!allowedSkillLevels.includes(normalizedSkillLevel)) {
+            return res.status(400).json({
+                message: `Invalid skillLevel. Allowed values are: ${allowedSkillLevels.join(", ")}`,
+            });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                fullName,
+                bio,
+                techIntrests,
+                skillLevel: normalizedSkillLevel, //store in lowercase form
+                collaborationStyle,
+                isOnboarded: true,
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: "User Onboarded Successfully",
+            user: updatedUser,
+        });
+
+    } catch (e) {
+        console.error("Error In Onboarding:", e.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+

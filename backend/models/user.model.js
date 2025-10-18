@@ -19,10 +19,37 @@ const userSchema = new mongoose.Schema(
             required: [true, "Password is required"],
             minlength: [6, "Password must be at least 6 characters long"],
         },
+        bio: {
+            type: String,
+            default: '',
+        },
         profilePicture: {
             type: String,
             default: null,
-        }
+        },
+        techIntrests: {
+            type: String,
+            default: "",
+        },
+        skillLevel: {
+            type: String,
+            enum: ["begginer", "intermediate","advance"],
+            default: "begginer",
+        },
+        collaborationStyle: {
+            type: String,
+            default: '',
+        },
+        isOnboarded: {
+            type: Boolean,
+            default: false,
+        },
+        friends: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            }
+        ],
     },
     { timestamps: true }
 );

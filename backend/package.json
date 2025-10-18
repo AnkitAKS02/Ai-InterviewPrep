@@ -28,7 +28,8 @@
     "openai": "^5.16.0",
     "pdf-parse": "^2.4.3",
     "pdf-parser": "^1.0.5",
-    "pdf-poppler": "^0.2.3"
+    "pdf-poppler": "^0.2.3",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
