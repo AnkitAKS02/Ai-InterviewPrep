@@ -2,14 +2,19 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PracticeNav from "./PracticeNav";
-import { useAuthStore } from "../../stores/useAuthStore";
+import { useAuthStore } from "../../stores/useAuthStore.js";
 import ProfileInfoCard from "../Cards/ProfileInfoCard";
+import { useEffect } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLogged, authUser } = useAuthStore();
-  console.log(authUser);
-  const [isOpenProfileCard, setIsOpenProfileCard]= useState(false);
+  const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
+  useEffect(() => {
+    setIsOpenProfileCard(isLogged);
+    console.log(authUser);
+    console.log("Auth status:", isLogged);
+  }, [isLogged]);
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6">
@@ -29,42 +34,48 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
-               to="/resume-dashboard"
+              to="/resume-dashboard"
               className="font-medium text-gray-700 hover:text-gray-900"
             >
               Resume AI
             </Link>
             <PracticeNav />
-             <Link
-               to="/resume-analyser"
+            <Link
+              to="/resume-analyser"
               className="font-medium text-gray-700 hover:text-gray-900"
             >
               CVAnalyser
             </Link>
+            <Link
+              to="/community"
+              className="font-medium text-gray-700 hover:text-gray-900"
+            >
+              Community
+            </Link>
             {/* Add other nav items here */}
-          </nav> 
+          </nav>
 
           {/* Right side buttons */}
           {!isOpenProfileCard ? (
             <div className="hidden md:flex items-center space-x-4">
-            {/* Use Link instead of <a> */}
-            <Link
-              to="/login"
-              className="font-medium text-gray-700 hover:text-gray-900"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors"
-            >
-              Create Free Account
-            </Link>
-          </div>
-          ): (
-              <ProfileInfoCard/>
+              {/* Use Link instead of <a> */}
+              <Link
+                to="/login"
+                className="font-medium text-gray-700 hover:text-gray-900"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors"
+              >
+                Create Free Account
+              </Link>
+            </div>
+          ) : (
+            <ProfileInfoCard />
           )}
-          
+
 
           {/* Mobile menu button */}
           <div className="md:hidden">

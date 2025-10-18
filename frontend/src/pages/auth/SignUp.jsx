@@ -25,9 +25,9 @@ export default function SignupPage() {
       setError("Passwords do not match!");
       return;
     }
+    signup(formData);
     navigate('/');
     setError("");
-    signup(formData);
   };
 
   return (

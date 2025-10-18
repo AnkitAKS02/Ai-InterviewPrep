@@ -15,8 +15,6 @@ export const signup = async (req, res) => {
         if (password.length < 6) {
             return res.status(400).json({ message: "Password must be at least 6 characters" });
         }
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -42,7 +40,7 @@ export const signup = async (req, res) => {
         const newUser = new User({
             fullName,
             email,
-            password: hashedPassword,
+            password,
             profilePicture: profilePictureUrl,
         });
 
@@ -72,43 +70,44 @@ export const signup = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
-export const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+export async function login(req, res) {
+    const { email, password } = req.body;
+    try{
         if (!email || !password) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({message:"All fields are required"});
         }
 
         const user = await User.findOne({ email });
-        if (!user) return res.status(401).json({ message: "User not found" });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
 
-        const isPasswordCorrect = await user.matchPassword(password);
-        if (!isPasswordCorrect) return res.status(401).json({ message: "Invalid email or password" });
+        const isPasswordCorrect = await user.matchPassword(password, user.password);
+        if(!isPasswordCorrect) {
+            return res.status(400).json({ message: "Invalid email or password" });
+        }
 
-        //creating jwt token
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
-            expiresIn: "7d",
+            expiresIn: "7d"
         });
 
         res.cookie("jwt", token, {
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true, // prevent XSS attacks,
-            sameSite: "strict", // prevent CSRF attacks
-            secure: process.env.NODE_ENV === "production",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+            httpOnly: true,
+            sameSite: "strict", // Helps prevent CSRF attacks
+            secure: process.env.NODE_ENV === "production", // Use secure cookies in production
         });
-
+        console.log("logged in");
         res.status(200).json({
-            _id: user._id,
-            fullName: user.fullName,
-            email: user.email,
-            profilePicture: user.profilePicture,
-            token,
-        });
+            success: true,
+            user,
+        })
     } catch (error) {
-        console.log("error in login controller", error.message);
-        return res.status(500).json({ message: "Internal server error" });
+        console.log("Error in login:", error.message);
+        return res.status(500).json({ message: "Internal Server error"});
     }
-};
+
+}
 
 export const logout = (req, res) => {
     try {

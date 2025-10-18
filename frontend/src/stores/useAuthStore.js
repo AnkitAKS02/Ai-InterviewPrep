@@ -10,6 +10,7 @@ export const useAuthStore = create((set, get) => ({
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
+  isOnboarding: false,
 
   checkAuth: async () => {
     try {
@@ -42,12 +43,12 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  login: async (data) => {
+  login: async ({email,password}) => {
     set({ isLoggingIn: true });
     try {
-      const res = await axiosInstance.post("/auth/login", data);
+      const res = await axiosInstance.post("/auth/login", {email,password});
       set({ authUser: res.data, isLogged: true });
-      console.log(get().authUser);
+      // console.log(get().authUser);
       toast.success("Logged in successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
@@ -65,6 +66,28 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       toast.error(error.response?.data?.message || "Logout failed");
     } 
+  },
+
+  onboard: async ({ fullName, bio, techIntrests, skillLevel, collaborationStyle }) => {
+    set({ isOnboarding: true });
+    try {
+      const res = await axiosInstance.post("/auth/onboarding", {
+        fullName,
+        bio,
+        techIntrests,
+        skillLevel,
+        collaborationStyle,
+      });
+
+      // Update the authUser state with updated user info
+      set({ authUser: res.data });
+      console.log(get().authUser);
+      toast.success("User onboarded successfully");
+    } catch (error) {
+      // console.error("Error in onboarding:", error);
+      toast.error(error.response?.data?.message || "Onboarding failed");
+    } finally {
+    }
   },
 
   

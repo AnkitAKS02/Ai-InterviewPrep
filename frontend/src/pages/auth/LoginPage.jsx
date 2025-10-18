@@ -22,7 +22,7 @@ const handleSubmit = async (e) => {
   setIsPending(true);
 
   try {
-    await login(formData); // assuming login returns a promise
+    await login({email:formData.email,password:formData.password}); // assuming login returns a promise
     setIsPending(false);
     navigate("/");// successful login
   } catch (err) {
