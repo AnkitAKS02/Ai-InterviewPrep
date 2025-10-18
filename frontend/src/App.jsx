@@ -16,6 +16,7 @@ import { useAuthStore } from './stores/useAuthStore.js';
 import { Loader, Loader2 } from 'lucide-react';
 import OnboardingForm from './pages/Forms/Onboarding/OnboardingForm.jsx';
 import Community from './pages/Community.jsx';
+import Sidebar from './components/communityComponents/Sidebar.jsx';
 function App() {
   const [count, setCount] = useState(0)
   const { authUser, checkAuth, isCheckingAuth,isOnboarding } = useAuthStore();
@@ -32,6 +33,7 @@ function App() {
     );
   return (
     <>
+    {/* <Sidebar/> */}
       <Router>
       <div className="min-h-screen bg-white">
         <Header />
