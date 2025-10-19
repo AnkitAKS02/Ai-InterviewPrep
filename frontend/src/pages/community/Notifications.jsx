@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Community() {
+export default function Notifications() {
   return (
     <div>
-      commn
+      
     </div>
   )
 }

@@ -1,5 +1,5 @@
-import { useState ,useEffect} from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import './App.css'
 import Header from './components/NavBar/Header.jsx'
 import LandingPage from './pages/LandingPage.jsx'
@@ -15,16 +15,18 @@ import ResumeScore from './pages/ResumeScore.jsx';
 import { useAuthStore } from './stores/useAuthStore.js';
 import { Loader, Loader2 } from 'lucide-react';
 import OnboardingForm from './pages/Forms/Onboarding/OnboardingForm.jsx';
-import Community from './pages/Community.jsx';
+import CommunityHome from './pages/community/CommunityHome.jsx';
 import Sidebar from './components/communityComponents/Sidebar.jsx';
+import Friends from './pages/community/Friends.jsx';
+import Notifications from './pages/community/Notifications.jsx';
+import CommunityLayout from './pages/community/CommunityLayout .jsx';
+import FindNewFriends from './pages/community/FindNewFriends.jsx';
 function App() {
-  const [count, setCount] = useState(0)
-  const { authUser, checkAuth, isCheckingAuth,isOnboarding } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, isOnboarding } = useAuthStore();
 
   useEffect(() => { checkAuth() }, [checkAuth]);
 
   const isOnboarded = isOnboarding || false;
-  {console.log(authUser)}
   if (isCheckingAuth && !authUser)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -33,25 +35,32 @@ function App() {
     );
   return (
     <>
-    {/* <Sidebar/> */}
+      {/* <Sidebar/> */}
       <Router>
-      <div className="min-h-screen bg-white">
-        <Header />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path= "/signup" element={authUser ? <Navigate to="/" /> : <SignupPage />} />
-        <Route path= "/login" element={authUser ? <Navigate to="/" /> : <LoginPage />} />
-          <Route path="/resume-dashboard" element={<ResumeDashBoard />} />
-          <Route path="/question-dashboard" element={<QuestionDashboard />} />
-          <Route path="/resume/:id" element={<EditResume />} />
+        <div className="min-h-screen bg-white">
+          <Header />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/signup" element={authUser ? <Navigate to="/" /> : <SignupPage />} />
+            <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />} />
+            <Route path="/resume-dashboard" element={<ResumeDashBoard />} />
+            <Route path="/question-dashboard" element={<QuestionDashboard />} />
+            <Route path="/resume/:id" element={<EditResume />} />
             <Route path="/inteview-question/:sessionId" element={<InterviewQuestion />} />
             <Route path="/resume-analyser" element={<ResumeAnalyserForm />} />
             <Route path="/resume-analyser-feedback" element={<ResumeScore />} />
-            <Route path='/community' element={isOnboarded?<Community/>:<OnboardingForm/>}/>
-        </Routes>
-      </div>
+            {/* <Route path='/community' element={isOnboarded ? <Community /> : <OnboardingForm />} /> */}
+            <Route path="/community" element={<CommunityLayout />}>
+              <Route index element={<CommunityHome />} /> {/*default /community*/}
+              <Route path="friends" element={<Friends />} />
+              <Route path="find" element={<FindNewFriends />} />
+              <Route path="notifications" element={<Notifications />} />
+            </Route>
+
+          </Routes>
+        </div>
       </Router>
-      <Toaster/>
+      <Toaster />
     </>
   )
 }

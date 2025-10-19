@@ -1,0 +1,78 @@
+{isLoadingRecommended ? (
+              <div className="flex justify-center py-12">
+                <span className="loading loading-spinner loading-lg" />
+              </div>
+            ) : recommendedUsers.length === 0 ? (
+              <div className="card bg-base-200 p-6 text-center">
+                <h3 className="font-semibold text-lg mb-2">No recommendations available</h3>
+                <p className="text-base-content opacity-70">
+                  Check back later for new tech partners!
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {recommendedUsers.map((user) => {
+                  // const hasRequestBeenSent = outgoingRequestsIds.has(user._id);
+                  const hasRequestBeenSent = outgoingRequestsIds.includes(user._id);
+
+
+                  return (
+                    <div
+                      key={user._id}
+                      className="card bg-base-200 hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="card-body p-5 space-y-4">
+                        <div className="flex items-center gap-3">
+                          <div className="avatar size-16 rounded-full">
+                            <img src={user.profilePicture} alt={user.fullName} />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-lg">{user.fullName}</h3>
+                            {user.location && (
+                              <div className="flex items-center text-xs opacity-70 mt-1">
+                                <MapPinIcon className="size-3 mr-1" />
+                                {user.location}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Tech Interest & Skill Level badges */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {user.techIntrest?.map((tech) => (
+                            <span key={tech} className="badge badge-secondary">
+                              {tech}
+                            </span>
+                          ))}
+                          {user.skillLevel && (
+                            <span className="badge badge-outline">{user.skillLevel}</span>
+                          )}
+                        </div>
+
+                        {user.bio && <p className="text-sm opacity-70">{user.bio}</p>}
+
+                        {/* Action button */}
+                        <button
+                          className={`btn w-full mt-2 ${hasRequestBeenSent || isSendingRequest ? "btn-disabled" : "btn-primary"
+                            }`}
+                          onClick={() => sendFriendRequest(user._id)}
+                          disabled={hasRequestBeenSent || isSendingRequest}
+                        >
+                          {hasRequestBeenSent ? (
+                            <>
+                              <CheckCircleIcon className="size-4 mr-2" />
+                              Request Sent
+                            </>
+                          ) : (
+                            <>
+                              <UserPlusIcon className="size-4 mr-2" />
+                              Send Friend Request
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}

@@ -34,6 +34,12 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
+              to="/"
+              className="font-medium text-gray-700 hover:text-gray-900"
+            >
+              Home
+            </Link>
+            <Link
               to="/resume-dashboard"
               className="font-medium text-gray-700 hover:text-gray-900"
             >
