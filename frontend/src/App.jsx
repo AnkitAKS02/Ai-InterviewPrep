@@ -21,6 +21,7 @@ import Friends from './pages/community/Friends.jsx';
 import Notifications from './pages/community/Notifications.jsx';
 import CommunityLayout from './pages/community/CommunityLayout .jsx';
 import FindNewFriends from './pages/community/FindNewFriends.jsx';
+import QuizDashboard from './pages/Dashboard/QuizDashboard.jsx';
 function App() {
   const { authUser, checkAuth, isCheckingAuth, isOnboarding } = useAuthStore();
 
@@ -56,6 +57,7 @@ function App() {
               <Route path="find" element={<FindNewFriends />} />
               <Route path="notifications" element={<Notifications />} />
             </Route>
+            <Route path="quiz-dashboard" element={<QuizDashboard/>}/>
 
           </Routes>
         </div>
