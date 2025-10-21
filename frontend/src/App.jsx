@@ -26,6 +26,7 @@ import { ThemeProvider } from './Context/ThemeProvider.jsx';
 import AllInterviewType from './pages/Interview/AllInterviewType.jsx';
 import QuestionAnswerInterviewDashboard from './pages/Dashboard/QuestionAnswerInterviewDashboard.jsx';
 import AiInterviewDashboard from './pages/Dashboard/AiInterviewDashboard.jsx';
+import Loader from './components/Loader.jsx'
 function App() {
   const { authUser, checkAuth, isCheckingAuth, isOnboarding } = useAuthStore();
 
@@ -35,7 +36,7 @@ function App() {
   if (isCheckingAuth && !authUser)
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader className="size-10 animate-spin" />
+        <Loader/>
       </div>
     );
   return (
