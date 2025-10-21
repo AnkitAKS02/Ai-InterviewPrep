@@ -1,14 +1,16 @@
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, MoonIcon, SunIcon, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PracticeNav from "./PracticeNav";
 import { useAuthStore } from "../../stores/useAuthStore.js";
 import ProfileInfoCard from "../Cards/ProfileInfoCard";
+import { useTheme } from "../../Context/ThemeProvider.jsx";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLogged, authUser } = useAuthStore();
   const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setIsOpenProfileCard(isLogged);
@@ -48,6 +50,12 @@ export default function Header() {
             </Link>
             <PracticeNav />
             <Link
+              to="/interview"
+              className="font-medium text-gray-700 hover:text-gray-900"
+            >
+              AI Inteview
+            </Link>
+            <Link
               to="/resume-analyser"
               className="font-medium text-gray-700 hover:text-gray-900"
             >
@@ -61,6 +69,17 @@ export default function Header() {
             </Link>
           </nav>
 
+          {/* <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-110 transition-all hidden"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? (
+              <MoonIcon className="w-5 h-5 text-gray-800" />
+            ) : (
+              <SunIcon className="w-5 h-5 text-yellow-400" />
+            )}
+          </button> */}
           {/* Right side */}
           <div className="hidden md:flex items-center space-x-4">
             {!isOpenProfileCard ? (
