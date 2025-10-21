@@ -13,6 +13,7 @@ import userFriendRoutes from './routes/userFriend.route.js'
 import { generateConceptExplanation,generateInterviewQuestion } from './controllers/ai.controller.js';
 import { protectRoute } from './middleware/auth.middleware.js';
 import { analyzeResume } from './controllers/ai.resume.analyser.js';
+import interviewRoute from './routes/interview.route.js'
 import { upload } from './lib/multer.js';
 import {app,io,server} from './lib/socket.js'
 const PORT = process.env.PORT || 3002;
@@ -44,7 +45,8 @@ app.use('/api/ai/resume-analyser',upload.single("resumeFile") , analyzeResume);
 //comunity-build -- wroking
 app.use('/api/userFriend', userFriendRoutes);
 
-
+//interview
+app.use('/api/interview', interviewRoute);
 
 
 // app.use(cors());
@@ -53,18 +55,3 @@ server.listen(PORT, () => {
     connectDB();
     console.log(`Server running on port:${PORT}`);
 })
-
-
-
-// {
-//
-//   "fullName": "Ankit Kumar","_id": "68f365ecb55b857e9833d2b5"
-//   "email": "ankitkumar@example.com",
-//   "password": "Ankit@123"
-// }
-
-
-// "_id": "68f3664e64615ab7469c9ee2",
-//   "fullName": "Riya Sharma",
-//     "email": "riyasharma@example.com",
-//       "password": "Riya@123"

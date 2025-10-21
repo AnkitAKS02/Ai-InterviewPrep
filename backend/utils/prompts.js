@@ -84,8 +84,8 @@ export const AIResponseFormat = `
       };
     }`;
 
-export const prepareInstructions = ({ jobTitle, text }) =>
-    `You are an expert in ATS (Applicant Tracking System) and resume analysis.
+export const prepareInstructions = ({ jobTitle, text }) => (
+  `You are an expert in ATS (Applicant Tracking System) and resume analysis.
       Please analyze and rate this resume and suggest how to improve it.
       The rating can be low if the resume is bad.
       Be thorough and detailed. Don't be afraid to point out any mistakes or areas for improvement.
@@ -98,4 +98,28 @@ export const prepareInstructions = ({ jobTitle, text }) =>
       Provide the feedback using the following format:
       ${AIResponseFormat}
       Return the analysis as an JSON object, without any other text and without the backticks.
-      Do not include any other text or comments.`;
+      Do not include any other text or comments.`
+);
+
+export const generateInterviewPrompt = (role, jobDescription, experience, topicsToFocus) =>( `
+You are an AI specialized in creating realistic technical interview questions.
+
+Task:
+- Job Role: ${role}
+- Candidate Experience: ${experience} years
+- Job Description: ${jobDescription}
+${topicsToFocus ? `- Additional Focus Areas: ${topicsToFocus}` : ""}
+- Generate 10 unique, relevant interview questions that match the job role and description.
+- Make sure the difficulty suits the experience level.
+- Return questions only — no answers, no explanations.
+- Keep the formatting clean and concise.
+- Respond strictly in pure JSON format:
+  [
+    { "question": "Your question here?" },
+    { "question": "Next question?" }
+  ]
+
+Important: Return only valid JSON. Do NOT include extra text, markdown, or commentary.
+`
+);
+
